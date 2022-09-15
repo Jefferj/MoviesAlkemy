@@ -25,6 +25,8 @@ class MainTabBarViewController: UITabBarController {
         vc3.title = "Top Search"
         
         tabBar.tintColor = .label
+        tabBar.barTintColor = .white
+            
         
         setViewControllers([vc1, vc2, vc3], animated: true)
         

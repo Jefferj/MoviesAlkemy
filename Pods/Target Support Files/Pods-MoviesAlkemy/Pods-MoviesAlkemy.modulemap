@@ -1,0 +1,6 @@
+framework module Pods_MoviesAlkemy {
+  umbrella header "Pods-MoviesAlkemy-umbrella.h"
+
+  export *
+  module * { export * }
+}
