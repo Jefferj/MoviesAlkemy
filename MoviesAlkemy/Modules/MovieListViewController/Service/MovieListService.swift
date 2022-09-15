@@ -11,7 +11,7 @@ class MovieListService {
     
     func getMovies(onComplete: @escaping ([MoviesDTO]) -> Void,
                    onError: @escaping (String) -> Void ){
-        ApiManager.shared.getCall(url: "https://api.themoviedb.org/3/movie/popular?api_key=469821b988270d2366e546a380e03332") { response in
+        ApiManager.shared.getCall(url: "https://api.themoviedb.org/3/movie/popular?api_key=469821b988270d2366e546a380e03332&language=en-US&page=1") { response in
             
             switch response {
             case .success(let data):

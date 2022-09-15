@@ -17,6 +17,7 @@ class MovieListViewController: UIViewController {
         aTable.translatesAutoresizingMaskIntoConstraints = false
         aTable.delegate = self
         aTable.dataSource = self
+        aTable.register(MoviesTableViewCell.self, forCellReuseIdentifier: String(describing: MoviesTableViewCell.self))
         view.addSubview(aTable)
         return aTable
     }()
@@ -62,11 +63,13 @@ extension MovieListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: MoviesTableViewCell.self), for: indexPath) as? MoviesTableViewCell else {
+            return UITableViewCell()
+        }
         if let movie = self.viewModel?.movies[indexPath.row] {
-            cell.textLabel?.text = movie.title
+            cell.name = movie.title
         }
         return cell
     }
 }
-//No mostró nada porque la Api falló en el llamado
+
