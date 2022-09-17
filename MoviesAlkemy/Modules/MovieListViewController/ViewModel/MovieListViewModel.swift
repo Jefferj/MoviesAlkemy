@@ -26,4 +26,9 @@ class MovieListViewModel {
         }
 
     }
+    
+    func getMovie(at index: Int, onComplete: @escaping (MoviesDTO) -> Void) {
+            let movie = movies[index]
+            onComplete(movie)
+        }
 }

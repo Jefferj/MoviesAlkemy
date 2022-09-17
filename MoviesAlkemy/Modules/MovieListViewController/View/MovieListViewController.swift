@@ -30,36 +30,57 @@ class MovieListViewController: UIViewController {
         self.viewModel?.getMovies {
             self.tableView.reloadData()
         }
-        
-
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            if !UserDefaults.standard.isUserLoggedIn {
+                let loginVC = LoginViewController()
+                loginVC.modalPresentationStyle = .fullScreen
+                self.present(loginVC, animated: false)
+            }
+        }
+    
     private func setupView() {
-        self.view.backgroundColor = UIColor(named: "Background")
-        self.navigationController?.navigationBar
-            .prefersLargeTitles = true
-    }
+        self.title = "Movie List"
+        self.view.backgroundColor = .white
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logOut))
+           }
    
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor)
-        ])
+    private func setupConstraints (){
+            NSLayoutConstraint.activate([
+                tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                tableView.topAnchor.constraint(equalTo: view.topAnchor)
+            ])
+        }
+    
+    @objc private func logOut() {
+            UserDefaults.standard.isUserLoggedIn = false
+            let loginVC = LoginViewController()
+            loginVC.modalPresentationStyle = .fullScreen
+            self.present(loginVC, animated: false)
+        }
+        
     }
 
-}
+
 
 extension MovieListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("Selected")
+        self.viewModel?.getMovie(at: indexPath.row, onComplete: { movie in
+            let vc = MovieDetailViewController()
+            vc.movieURL = movie.title
+            self.navigationController?.pushViewController(vc, animated: true)
+        })
     }
 }
 
 extension MovieListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.viewModel?.movies.count ?? 0 
+        self.viewModel?.movies.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -72,4 +93,3 @@ extension MovieListViewController: UITableViewDataSource {
         return cell
     }
 }
-
